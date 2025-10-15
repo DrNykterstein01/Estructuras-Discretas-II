@@ -4,15 +4,15 @@ from tkinter import ttk, messagebox
 class app:
     def __init__(self):
         self.ventana = tk.Tk()
-        self.ventana.title("Interfaz momentánea :3")
+        self.ventana.title("Tree Weaver")
         self.ventana.geometry("700x500")
-        self.botonGrafico = tk.Button(self.ventana, text="Ver Gráfico", command=self.mostrarGrafico)
+        self.botonGrafico = tk.Button(self.ventana, text="Ver Gráfico", command=self.mostrarGrafico, fg="white", bg="blue")
         self.botonGrafico.place(x=20, y=250)
-        self.botonListado = tk.Button(self.ventana, text="Listado de trayectorias", command=self.Listado)
+        self.botonListado = tk.Button(self.ventana, text="Listado de trayectorias", command=self.Listado, fg="white", bg="blue")
         self.botonListado.place(x=180, y=250)
-        self.botonModPond = tk.Button(self.ventana, text="Modificar Ponderaciones", command=self.ModPond)
+        self.botonModPond = tk.Button(self.ventana, text="Modificar Ponderaciones", command=self.ModPond, fg="white", bg="blue")
         self.botonModPond.place(x=340, y=250)
-        self.botonCalcular = tk.Button(self.ventana, text="Calcular Ponderaciones", command=self.Calcular)
+        self.botonCalcular = tk.Button(self.ventana, text="Calcular Ponderaciones", command=self.Calcular, fg="white", bg="blue")
         self.botonCalcular.place(x=180, y=350)
 
         self.ventana.mainloop()
