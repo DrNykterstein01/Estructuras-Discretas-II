@@ -6,6 +6,10 @@ class app:
         self.ventana = tk.Tk()
         self.ventana.title("Tree Weaver")
         self.ventana.geometry("700x500")
+        frame1 = tk.Frame(self.ventana, bg= "pink", bd=50)
+        frame2 = tk.Frame(self.ventana, bg= "aquamarine", bd=50)
+        frame1.pack(expand=True, fill="both")
+        frame2.pack(expand=True, fill="both")
         self.botonGrafico = tk.Button(self.ventana, text="Ver Gráfico", command=self.mostrarGrafico, fg="white", bg="blue")
         self.botonGrafico.place(x=20, y=250)
         self.botonListado = tk.Button(self.ventana, text="Listado de trayectorias", command=self.Listado, fg="white", bg="blue")
@@ -14,6 +18,7 @@ class app:
         self.botonModPond.place(x=340, y=250)
         self.botonCalcular = tk.Button(self.ventana, text="Calcular Ponderaciones", command=self.Calcular, fg="white", bg="blue")
         self.botonCalcular.place(x=180, y=350)
+
 
         self.ventana.mainloop()
 
