@@ -87,12 +87,102 @@ class Grafo:
         mpl.show()
 
         return extremosDelArbol
+    def dfsrecorrer(self, verticeInicial):
+        visitados = set()
+        orden = []
+        extremos = []
 
+        def dfs(v):
+            visitados.add(v)
+            orden.append(v)
+            for vecino in sorted(self.estructura.neighbors(v)):
+                if vecino not in visitados:
+                    extremos.append((v, vecino))
+                    dfs(vecino)
 
-#ESTO DE AQUÍ ES TEMPORAL. Lo trabajaremos después en el main para crear las vistas del grafo y eso
+        dfs(verticeInicial)
+
+        # Crear un subgrafo con las aristas del árbol DFS
+        subgrafo_DFS = netx.Graph()
+        subgrafo_DFS.add_edges_from(extremos)
+
+        if self.posicion is None:
+            self.posicion = netx.spring_layout(self.estructura, seed=42)
+
+        mpl.figure(figsize=(12,8))
+        netx.draw(subgrafo_DFS, self.posicion, with_labels=True, node_size=800,
+                  node_color="darkgreen", font_weight="bold")
+        mpl.title(f"Árbol Recubridor (DFS) desde el vértice: {verticeInicial}")
+        mpl.axis("off")
+        mpl.show()
+
+        return orden, subgrafo_DFS
+    def kruskal(self):
+        arbolminimo = netx.Graph()
+
+        # Crear lista de aristas con peso
+        aristas = []
+        for v1, v2, peso in self.estructura.edges(data="weight"):
+    
+            aristas.append((v1, v2, peso))
+        # Ordenar las aristas
+        aristas.sort(key=lambda x: x[2])
+
+        # Inicializar estructuras
+        padres = {}
+        rangos = {}
+
+        def encontrarpadre(vertice):
+            # Encontrar el padre del vertice
+            if padres[vertice] != vertice:
+                padres[vertice] = encontrarpadre(padres[vertice])
+            return padres[vertice]
+
+        def union(vertice1, vertice2):
+            # Unir los dos vertices
+            padre1 = encontrarpadre(vertice1)
+            padre2 = encontrarpadre(vertice2)
+            if padre1 == padre2:
+                return False
+            if rangos[padre1] > rangos[padre2]:
+                padres[padre2] = padre1
+            elif rangos[padre1] < rangos[padre2]:
+                padres[padre1] = padre2
+            else:
+                padres[padre2] = padre1
+                rangos[padre1] += 1
+            return True
+
+        # Inicializar padres y rangos
+        for vertice in self.estructura.nodes():
+            padres[vertice] = vertice
+            rangos[vertice] = 0
+
+        # Recorrer aristas en orden y construir árbol mínimo
+        for v1, v2, peso in aristas:
+            if union(v1, v2):
+                arbolminimo.add_edge(v1, v2, weight=peso)
+
+        # Dibujar árbol mínimo
+        if self.posicion is None:
+            self.posicion = netx.spring_layout(self.estructura, seed=42)
+        mpl.figure(figsize=(12,8))
+        netx.draw(arbolminimo, self.posicion, with_labels=True, node_size=800,
+                  node_color="gold", font_weight="bold")
+        mpl.title("Árbol Recubridor (Kruskal)")
+        mpl.axis("off")
+        mpl.show()
+
+        return arbolminimo
+ #ESTO DE AQUÍ ES TEMPORAL. Lo trabajaremos después en el main para crear las vistas del grafo y eso
 if __name__ == "__main__":
     grafo = Grafo()
     grafo.extremosPorArista()
     grafo.dibujarGrafo()
     arbolRecubridorBFS = grafo.BFS("A")
     print(f"Aristas del árbol BFS: {arbolRecubridorBFS}")
+    arbolRecubridordfs, orden = grafo.dfsrecorrer("A")
+    print(f"Orden de visita dfs: {orden}")
+    arbolminimo1 = grafo.kruskal()
+    print(f"Aristas del árbol minimo: {list(arbolminimo1.edges(data=True))}")
+    
